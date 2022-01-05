@@ -9,8 +9,4 @@
     <Folder Include="NewFolder\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BookStore_App\BookStore_App.csproj" />
-  </ItemGroup>
-
 </Project>
