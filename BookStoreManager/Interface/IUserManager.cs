@@ -5,6 +5,7 @@ namespace BookStore_App.Manager
 {
     public interface IUserManager
     {
-        public SignUpModel Register(SignUpModel UserSignUp);
+        public int Register(SignUpModel UserSignUp);
+        string Login(LoginModel userlogin);
     }
 }

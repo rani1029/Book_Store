@@ -15,11 +15,23 @@ namespace BookStore_App.Manager
         {
             this.repository = repository;
         }
-        public SignUpModel Register(SignUpModel UserSignUp)
+        public int Register(SignUpModel UserSignUp)
         {
             try
             {
                 return this.repository.Register(UserSignUp);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public string Login(LoginModel login)
+        {
+            try
+            {
+                return this.repository.Login(login);
             }
             catch (Exception ex)
             {

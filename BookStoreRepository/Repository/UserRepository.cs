@@ -21,9 +21,9 @@ namespace BookStore_App.BookStoreRepository
         //declare the Ado classes
         SqlConnection sqlConnection;
 
-        public SignUpModel Register(SignUpModel UserSignUp)
+        public int Register(SignUpModel UserSignUp)
         {
-            SignUpModel UserModel = new SignUpModel();
+            var result = 0;
             // instantiate connection with connection string  
             sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDb"));
             try
@@ -31,18 +31,20 @@ namespace BookStore_App.BookStoreRepository
                 using (sqlConnection)
                 {
                     SqlCommand cmd = new SqlCommand("sp_AddCustomer", sqlConnection);
-                    cmd.CommandType = CommandType.StoredProcedure;
 
-                    UserSignUp.Password = EncryptPassword(UserSignUp.Password);
+                    //UserSignUp.Password = EncryptPassword(UserSignUp.Password);
                     cmd.Parameters.AddWithValue("@Name", UserSignUp.CustomerName);
                     cmd.Parameters.AddWithValue("@Email", UserSignUp.Email);
                     cmd.Parameters.AddWithValue("@Password", UserSignUp.Password);
                     cmd.Parameters.AddWithValue("@Phone", UserSignUp.PhoneNumber);
                     sqlConnection.Open();
-                    cmd.ExecuteNonQuery();
+                    result = cmd.ExecuteNonQuery();
+                    //result = cmd.ExecuteScalar();
+
                     sqlConnection.Close();
+
                 }
-                return UserModel;
+                return result;
             }
 
             catch (Exception e)
@@ -54,6 +56,49 @@ namespace BookStore_App.BookStoreRepository
                 sqlConnection.Close();
             }
         }
+
+        public string Login(LoginModel login)
+        {
+            sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDb"));
+            try
+            {
+                using (sqlConnection)
+                {
+                    string storeprocedure = "spLoginDetails";
+                    SqlCommand sqlCommand = new SqlCommand(storeprocedure, sqlConnection);
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.AddWithValue("@Email", login.Email);
+                    sqlCommand.Parameters.AddWithValue("@Password", EncryptPassword(login.Password));
+                    sqlConnection.Open();
+                    SignUpModel signUpModel = new SignUpModel();
+                    SqlDataReader sqlData = sqlCommand.ExecuteReader();
+                    while (sqlData.Read())
+                    {
+                        signUpModel.CustomerId = Convert.ToInt32(sqlData["UserId"]);
+                        signUpModel.CustomerName = sqlData["Name"].ToString();
+                        signUpModel.Email = sqlData["Email"].ToString();
+                        signUpModel.PhoneNumber = Convert.ToInt64(sqlData["Phone"]);
+                        if (signUpModel != null)
+                        {
+                            return "Login Successful";
+                        }
+
+                        else
+                        {
+                            return "Login Failed";
+                        }
+                    }
+                }
+            }
+
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
+
         //Password encryption
         public string EncryptPassword(string password)
         {
