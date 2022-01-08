@@ -48,10 +48,10 @@ namespace BookStore_App
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                //based on this routing it redirect our request to the corresponding controller and action
+                endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=Index}/{id?}");//pattern of routing in mvc with default values
             });
             app.UseSwagger();
             app.UseSwaggerUI(c =>

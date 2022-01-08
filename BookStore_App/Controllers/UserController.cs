@@ -18,7 +18,7 @@ namespace BookStore_App.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
+        [Route("SignUp")]
         public IActionResult Register([FromBody] SignUpModel userDetails)
         {
             try

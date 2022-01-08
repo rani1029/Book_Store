@@ -23,28 +23,32 @@ namespace BookStore_App.BookStoreRepository
 
         public int Register(SignUpModel UserSignUp)
         {
-            var result = 0;
+            //var result = 0;
             // instantiate connection with connection string  
             sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDb"));
             try
             {
-                using (sqlConnection)
+                if (UserSignUp != null)
                 {
-                    SqlCommand cmd = new SqlCommand("sp_AddCustomer", sqlConnection);
+                    using (sqlConnection)
+                    {
+                        SqlCommand cmd = new SqlCommand("sp_AddCustomer", sqlConnection);
+                        // SqlCommand.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        //UserSignUp.Password = EncryptPassword(UserSignUp.Password);
+                        cmd.Parameters.AddWithValue("@Name", UserSignUp.CustomerName);
+                        cmd.Parameters.AddWithValue("@Email", UserSignUp.Email);
+                        cmd.Parameters.AddWithValue("@Password", UserSignUp.Password);
+                        cmd.Parameters.AddWithValue("@Phone", UserSignUp.PhoneNumber);
+                        sqlConnection.Open();
+                        int result = cmd.ExecuteNonQuery();
+                        //result = cmd.ExecuteScalar();
 
-                    //UserSignUp.Password = EncryptPassword(UserSignUp.Password);
-                    cmd.Parameters.AddWithValue("@Name", UserSignUp.CustomerName);
-                    cmd.Parameters.AddWithValue("@Email", UserSignUp.Email);
-                    cmd.Parameters.AddWithValue("@Password", UserSignUp.Password);
-                    cmd.Parameters.AddWithValue("@Phone", UserSignUp.PhoneNumber);
-                    sqlConnection.Open();
-                    result = cmd.ExecuteNonQuery();
-                    //result = cmd.ExecuteScalar();
-
-                    sqlConnection.Close();
-
+                        sqlConnection.Close();
+                        return result;
+                    }
                 }
-                return result;
+                return 0;
             }
 
             catch (Exception e)
@@ -78,19 +82,18 @@ namespace BookStore_App.BookStoreRepository
                         signUpModel.CustomerId = Convert.ToInt32(sqlData["UserId"]);
                         signUpModel.CustomerName = sqlData["Name"].ToString();
                         signUpModel.Email = sqlData["Email"].ToString();
-                        signUpModel.PhoneNumber = Convert.ToInt64(sqlData["Phone"]);
+                        //signUpModel.PhoneNumber = Convert.ToInt64(sqlData["Phone"]);
                         if (signUpModel != null)
                         {
                             return "Login Successful";
                         }
 
-                        else
-                        {
-                            return "Login Failed";
-                        }
+
                     }
                 }
+                return "Login Failed";
             }
+
 
             catch (Exception e)
             {
