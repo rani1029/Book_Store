@@ -27,7 +27,7 @@ namespace BookStore_App.Manager
             }
         }
 
-        public string Login(LoginModel login)
+        public int Login(LoginModel login)
         {
             try
             {

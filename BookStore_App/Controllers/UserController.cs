@@ -51,15 +51,20 @@ namespace BookStore_App.Controllers
         {
             try
             {
-                string result = this.manager.Login(userlogin);
-                if (result.Equals("Login Successful"))
+                int result = this.manager.Login(userlogin);
+                if (result == 2)
                 {
-                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result });
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = "Login is successful" });
+                }
+                else if (result == 1)
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Password is incorrect and Login is Unsuccessful" });
                 }
                 else
                 {
-                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Email is incorrect and Login is Unsuccessful" });
                 }
+
             }
             catch (Exception ex)
             {

@@ -7,6 +7,6 @@ namespace BookStore_App.BookStoreRepository
     public interface IUserRepository
     {
         public int Register(SignUpModel UserSignUp);
-        string Login(LoginModel login);
+        int Login(LoginModel login);
     }
 }

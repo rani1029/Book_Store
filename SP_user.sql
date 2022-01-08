@@ -31,21 +31,30 @@ End
 
 ---------login stored procedure
 
-Alter procedure spLoginDetails  
+Create procedure spLogin
 (
 @EmailId VARCHAR(50),
 @Password VARCHAR(20),
-@result int output
-)   
+@User int = Null OUTPUT
+)
 as
 Begin
 	Begin Try
-	begin
-	if exists(select * from UserRegistration where Email= @EmailId AND Password=@Password)
-	SELECT Email, Password
-	FROM UserRegistration;
-		 set @result=1;
-	end
+		IF EXISTS(SELECT * FROM UserRegistration WHERE Email=@EmailId)
+		BEGIN
+			IF EXISTS(SELECT * FROM UserRegistration WHERE Email=@EmailId AND Password=@Password)
+			BEGIN
+				SET @User = 2;
+			END
+			ELSE
+			BEGIN
+				SET @User = 1;
+			END
+		END
+		ELSE
+		BEGIN
+			SET @User = 0;
+		END
 	End Try
 	BEGIN CATCH
 	Select ERROR_MESSAGE() AS ErrorMessage;
