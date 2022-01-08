@@ -46,7 +46,6 @@ Begin
 	FROM UserRegistration;
 		 set @result=1;
 	end
-	
 	End Try
 	BEGIN CATCH
 	Select ERROR_MESSAGE() AS ErrorMessage;
