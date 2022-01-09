@@ -38,5 +38,16 @@ namespace BookStore_App.Manager
                 throw new Exception(ex.Message);
             }
         }
+        public bool ResetPassword(ResetModel resetPassword)
+        {
+            try
+            {
+                return this.repository.ResetPassword(resetPassword);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

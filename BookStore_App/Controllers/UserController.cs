@@ -1,6 +1,7 @@
 ﻿using System;
 using BookStore_App.BookStoreModel;
 using BookStore_App.Manager;
+using BookStoreModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore_App.Controllers
@@ -70,6 +71,30 @@ namespace BookStore_App.Controllers
             {
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
+        }
+
+        [HttpPut]
+        [Route("resetpassword")]
+        public IActionResult ResetPassword([FromBody] ResetModel resetPassword)
+        {
+            var result = this.manager.ResetPassword(resetPassword);
+            try
+            {
+                if (result)
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = "Successfully changed password !" });
+
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Try again !" });
+                }
+            }
+            catch (Exception e)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = e.Message });
+            }
+
         }
     }
 }

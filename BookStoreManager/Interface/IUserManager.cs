@@ -7,5 +7,6 @@ namespace BookStore_App.Manager
     {
         public int Register(SignUpModel UserSignUp);
         int Login(LoginModel userlogin);
+        bool ResetPassword(ResetModel resetPassword);
     }
 }

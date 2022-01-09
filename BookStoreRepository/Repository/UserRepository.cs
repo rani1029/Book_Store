@@ -98,6 +98,44 @@ namespace BookStore_App.BookStoreRepository
                 throw new Exception(e.Message);
             }
         }
+
+        public bool ResetPassword(ResetModel resetPassword)
+        {
+            sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDb"));
+            using (sqlConnection)
+            {
+                try
+                {
+                    //passing query in terms of stored procedure
+                    SqlCommand sqlCommand = new SqlCommand("Sp_ResetPassword", sqlConnection);
+                    //passing command type as stored procedure
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlConnection.Open();
+                    //adding the parameter to the strored procedure
+                    sqlCommand.Parameters.AddWithValue("@EmailId", resetPassword.Email);
+                    sqlCommand.Parameters.AddWithValue("@NewPassword", resetPassword.NewPassword);
+                    sqlCommand.Parameters.Add("@result", SqlDbType.Int);
+                    sqlCommand.Parameters["@result"].Direction = ParameterDirection.Output;
+                    //checking the result 
+                    sqlCommand.ExecuteNonQuery();
+
+                    var result = sqlCommand.Parameters["@result"].Value;
+                    if (!(result is DBNull))
+                        return true;
+                    else
+                        return false;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+                finally
+                {
+                    sqlConnection.Close();
+                }
+
+            }
+        }
     }
 
 }
