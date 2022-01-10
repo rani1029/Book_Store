@@ -65,5 +65,32 @@ namespace BookStore_App.Controllers
                 return this.NotFound(new { Status = false, Message = e.Message });
             }
         }
+
+        [HttpPut]
+        [Route("api/UpdateBook")]
+        public IActionResult UpdateBook(BookModel Bookmodel)
+        {
+            try
+            {
+                var result = this.manager.UpdateBook(Bookmodel);
+                if (result)
+                {
+
+                    return this.Ok(new { Status = true, Message = "Book updated Successfully !" });
+                }
+                else
+                {
+
+                    return this.BadRequest(new { Status = false, Message = "Failed to updated Book" });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return this.NotFound(new { Status = false, Message = ex.Message });
+
+            }
+        }
+
     }
 }
