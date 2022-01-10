@@ -144,13 +144,17 @@ namespace BookStore_App.BookStoreRepository
             {
                 using (sqlConnection)
                 {
-                    string storeprocedure = "spForgotPassword";
+                    string storeprocedure = "Sp_ForgetPassword";
                     SqlCommand sqlCommand = new SqlCommand(storeprocedure, sqlConnection);
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@Email", email);
+                    sqlCommand.Parameters.AddWithValue("@EmailId", email);
+                    sqlCommand.Parameters.Add("@result", SqlDbType.Int);
+                    sqlCommand.Parameters["@result"].Direction = ParameterDirection.Output;
                     sqlConnection.Open();
-                    int result = Convert.ToInt32(sqlCommand.ExecuteScalar());
-                    if (result == 1)
+                    sqlCommand.ExecuteNonQuery();
+
+                    var result = sqlCommand.Parameters["@result"].Value;
+                    if (!(result is DBNull))
                     {
                         this.SMTPmail(email);
                         return "Email sent to user";
@@ -217,7 +221,7 @@ namespace BookStore_App.BookStoreRepository
             var receivequeue = new MessageQueue(@".\Private$\BookStore");
             var receivemsg = receivequeue.Receive();
             receivemsg.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
-            return receivemsg.ToString();
+            return receivemsg.Body.ToString();
         }
     }
 

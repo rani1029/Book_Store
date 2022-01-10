@@ -49,5 +49,18 @@ namespace BookStore_App.Manager
                 throw new Exception(ex.Message);
             }
         }
+
+        public string ForgotPassword(string email)
+        {
+            try
+            {
+                return this.repository.ForgotPassword(email);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
     }
 }

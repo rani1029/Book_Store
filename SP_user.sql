@@ -31,7 +31,7 @@ End
 
 ---------login stored procedure
 
-Create procedure spLogin
+ create procedure spLogin
 (
 @EmailId VARCHAR(50),
 @Password VARCHAR(20),
@@ -42,7 +42,11 @@ Begin
 	Begin Try
 		IF EXISTS(SELECT * FROM UserRegistration WHERE Email=@EmailId)
 		BEGIN
-			IF EXISTS(SELECT * FROM UserRegistration WHERE Email=@EmailId AND Password=@Password)
+		Declare @Encrypt varbinary(200)
+           Select @Encrypt = EncryptByPassPhrase('key', @Password )  
+
+			IF EXISTS(SELECT * FROM UserRegistration WHERE Email=@EmailId AND
+			 Password=@Encrypt)
 			BEGIN
 				SET @User = 2;
 			END

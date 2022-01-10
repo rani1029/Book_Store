@@ -28,7 +28,7 @@ namespace BookStore_App.Controllers
                 if (result != 0)
                 {
 
-                    return this.Ok(new ResponseModel<string>() { Status = true, Message = "Added New User Successfully !" });
+                    return this.Ok(new { Status = true, Message = "Added New User Successfully !", Data = result });
                 }
                 else
                 {
@@ -54,11 +54,11 @@ namespace BookStore_App.Controllers
                 int result = this.manager.Login(userlogin);
                 if (result == 2)
                 {
-                    return this.Ok(new ResponseModel<string>() { Status = true, Message = "Login is successful" });
+                    return this.Ok(new { Status = true, Message = "Login is successful", Data = result });
                 }
                 else if (result == 1)
                 {
-                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Password is incorrect and Login is Unsuccessful" });
+                    return this.BadRequest(new { Status = false, Message = "Password is incorrect and Login is Unsuccessful", Data = result });
                 }
                 else
                 {
@@ -96,26 +96,26 @@ namespace BookStore_App.Controllers
 
         }
 
-        //[HttpPost]
-        //[Route("forgotPassword")]
-        //public IActionResult ForgotPassword(string email)
-        //{
-        //    try
-        //    {
-        //        string result = this.manager.ForgotPassword(email);
-        //        if (result.Equals("Email sent to user"))
-        //        {
-        //            return this.Ok(new ResponseModel<string>() { Status = true, Message = result });
-        //        }
-        //        else
-        //        {
-        //            return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
-        //    }
-        //}
+        [HttpPost]
+        [Route("forgotPassword")]
+        public IActionResult ForgotPassword(string email)
+        {
+            try
+            {
+                string result = this.manager.ForgotPassword(email);
+                if (result.Equals("Email sent to user"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
     }
 }

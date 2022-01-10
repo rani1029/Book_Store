@@ -8,6 +8,6 @@ namespace BookStore_App.Manager
         public int Register(SignUpModel UserSignUp);
         int Login(LoginModel userlogin);
         bool ResetPassword(ResetModel resetPassword);
-        // string ForgotPassword(string email);
+        string ForgotPassword(string email);
     }
 }
