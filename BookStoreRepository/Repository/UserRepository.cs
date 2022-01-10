@@ -1,10 +1,12 @@
 ﻿using BookStore_App.BookStoreModel;
 using BookStoreModel;
+using Experimental.System.Messaging;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -43,7 +45,6 @@ namespace BookStore_App.BookStoreRepository
                         sqlConnection.Open();
                         int result = cmd.ExecuteNonQuery();
                         //result = cmd.ExecuteScalar();
-
                         sqlConnection.Close();
                         return result;
                     }
@@ -135,6 +136,88 @@ namespace BookStore_App.BookStoreRepository
                 }
 
             }
+        }
+        public string ForgotPassword(string email)
+        {
+            sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDB"));
+            try
+            {
+                using (sqlConnection)
+                {
+                    string storeprocedure = "spForgotPassword";
+                    SqlCommand sqlCommand = new SqlCommand(storeprocedure, sqlConnection);
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@Email", email);
+                    sqlConnection.Open();
+                    int result = Convert.ToInt32(sqlCommand.ExecuteScalar());
+                    if (result == 1)
+                    {
+                        this.SMTPmail(email);
+                        return "Email sent to user";
+                    }
+                    else
+                    {
+                        return "Email does not Exists";
+                    }
+                }
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+
+        public void SMTPmail(string email)
+        {
+            MailMessage mailId = new MailMessage();
+            SmtpClient smtpServer = new SmtpClient("smtp.gmail.com"); ////allow App to sent email using SMTP 
+            mailId.From = new MailAddress(this.Configuration["Credentials:Email"]); ////contain mail id from where maill will send
+            mailId.To.Add(email); //// the user mail to which maill will be send
+            mailId.Subject = "forgot password issue";
+            this.SendMSMQ();
+            mailId.Body = this.ReceiveMSMQ();
+            smtpServer.Port = 587; ////Port no 
+            smtpServer.Credentials = new System.Net.NetworkCredential(this.Configuration["Credentials:Email"], this.Configuration["Credentials:Password"]);
+            smtpServer.EnableSsl = true;  ////specify smtpserver use ssl or not, default setting is false
+            smtpServer.Send(mailId);
+        }
+
+        /// <summary>
+        /// sets data to the queue
+        /// </summary>
+        public void SendMSMQ()
+        {
+            MessageQueue msgQueue; ////provide access to a queue in MSMQ
+                                   ////checking this private queue exists or not
+            if (MessageQueue.Exists(@".\Private$\BookStore"))
+            {
+                msgQueue = new MessageQueue(@".\Private$\BookStore"); ////Path for queue
+            }
+            else
+            {
+                msgQueue = MessageQueue.Create(@".\Private$\BookStore");
+            }
+
+            string body = "Please checkout the below url to create your new password";
+            msgQueue.Label = "MailBody"; ////Adding label to queue
+                                         ////Sending msg
+            msgQueue.Send(body);
+        }
+
+        /// <summary>
+        /// receives mail
+        /// </summary>
+        /// <returns>receives msg in queue</returns>
+        public string ReceiveMSMQ()
+        {
+            var receivequeue = new MessageQueue(@".\Private$\BookStore");
+            var receivemsg = receivequeue.Receive();
+            receivemsg.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
+            return receivemsg.ToString();
         }
     }
 
