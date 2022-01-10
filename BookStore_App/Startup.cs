@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookStore_App.BookStoreRepository;
 using BookStore_App.Manager;
+using BookStoreManager.Manager;
+using BookStoreRepository.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +30,8 @@ namespace BookStore_App
             services.AddMvc();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<IBookRepository, BookRepository>();
+            services.AddTransient<IBookManager, BookManager>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1.0", new OpenApiInfo { Title = "BookStore", Description = "Books", Version = "1.0" });

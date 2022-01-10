@@ -10,5 +10,6 @@ namespace BookStore_App.BookStoreRepository
         int Login(LoginModel login);
         bool ResetPassword(ResetModel resetPassword);
         string ForgotPassword(string email);
+
     }
 }

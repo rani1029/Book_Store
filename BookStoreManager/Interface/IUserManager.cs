@@ -9,5 +9,6 @@ namespace BookStore_App.Manager
         int Login(LoginModel userlogin);
         bool ResetPassword(ResetModel resetPassword);
         string ForgotPassword(string email);
+
     }
 }
