@@ -18,6 +18,7 @@ namespace BookStoreRepository.Repository
         SqlConnection sqlConnection;
         public int AddBook(BookModel bookmodel)
         {
+
             sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDb"));
             using (sqlConnection)
                 try
@@ -93,27 +94,38 @@ namespace BookStoreRepository.Repository
 
         public bool UpdateBook(BookModel bookmodel)
         {
+            var book = GetBook(bookmodel.BookId);
+            var price = bookmodel.Price;
+            var originalPrice = bookmodel.OriginalPrice;
+            var bcount = bookmodel.BookCount;
+            if (bookmodel.Price == 0)
+            {
+                price = book.Price;
+            };
+            if (bookmodel.OriginalPrice == 0)
+            {
+                originalPrice = book.OriginalPrice;
+            };
+            if (bookmodel.BookCount == 0)
+            {
+                bcount = book.BookCount;
+            };
             sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDB"));
-
             using (sqlConnection)
             {
-
                 try
                 {
                     SqlCommand sqlCommand = new SqlCommand("spUpdateBook", sqlConnection);
-
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlConnection.Open();
-                    sqlCommand.Parameters.AddWithValue("@BookName", bookmodel.BookName);
-                    sqlCommand.Parameters.AddWithValue("@AuthorName", bookmodel.AuthorName);
-                    sqlCommand.Parameters.AddWithValue("@Price", bookmodel.Price);
-                    sqlCommand.Parameters.AddWithValue("@originalPrice", bookmodel.OriginalPrice);
-                    sqlCommand.Parameters.AddWithValue("@BookDescription", bookmodel.BookDescription);
-                    sqlCommand.Parameters.AddWithValue("@BookImage", bookmodel.Image);
-                    sqlCommand.Parameters.AddWithValue("@Rating", bookmodel.Rating);
-                    sqlCommand.Parameters.AddWithValue("@RatingCount", bookmodel.RatingCount);
-                    sqlCommand.Parameters.AddWithValue("@Count", bookmodel.BookCount);
-
+                    sqlCommand.Parameters.AddWithValue("@BookId", bookmodel.BookId);
+                    sqlCommand.Parameters.AddWithValue("@BookName", bookmodel.BookName ??= book.BookName);
+                    sqlCommand.Parameters.AddWithValue("@AuthorName", bookmodel.AuthorName ??= book.AuthorName);
+                    sqlCommand.Parameters.AddWithValue("@Price", price);
+                    sqlCommand.Parameters.AddWithValue("@originalPrice", originalPrice);
+                    sqlCommand.Parameters.AddWithValue("@BookDescription", bookmodel.BookDescription ??= book.BookDescription);
+                    sqlCommand.Parameters.AddWithValue("@BookImage", bookmodel.Image ??= book.Image);
+                    sqlCommand.Parameters.AddWithValue("@BookCount", bcount);
                     sqlCommand.Parameters.Add("@book", SqlDbType.Int);
                     sqlCommand.Parameters["@book"].Direction = ParameterDirection.Output;
                     sqlCommand.ExecuteNonQuery();
@@ -124,9 +136,9 @@ namespace BookStoreRepository.Repository
                         return false;
 
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception(e.Message);
+                    throw new Exception(ex.Message);
                 }
                 finally
                 {
