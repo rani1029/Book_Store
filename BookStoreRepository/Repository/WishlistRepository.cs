@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -41,6 +42,38 @@ namespace BookStoreRepository
                 {
                     sqlConnection.Close();
                 }
+        }
+
+        public bool DeleteBookFromWishList(int WishListId)
+        {
+            try
+            {
+
+                sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDb"));
+                using (sqlConnection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("SpDeleteFromWishlist", sqlConnection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@WishlistId", WishListId);
+                    sqlConnection.Open();
+                    var result = sqlCommand.ExecuteNonQuery();
+                    if (result > 0)
+                        return true;
+                    else
+                        return false;
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+
         }
 
     }

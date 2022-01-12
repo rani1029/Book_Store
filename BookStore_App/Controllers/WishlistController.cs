@@ -43,5 +43,32 @@ namespace BookStore_App.Controllers
 
             }
         }
+
+        [HttpDelete]
+        [Route("RemoveFromWishList")]
+        public IActionResult RemoveFromWishList(int wishListId)
+        {
+            try
+            {
+                var result = this.manager.DeleteBookFromWishList(wishListId);
+                if (result)
+                {
+
+                    return this.Ok(new { Status = true, Message = "Removed from Wish list Successfully !" });
+                }
+                else
+                {
+
+                    return this.BadRequest(new { Status = false, Message = "Failed to Remove From wish list, Try again" });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+
+            }
+        }
+
     }
 }

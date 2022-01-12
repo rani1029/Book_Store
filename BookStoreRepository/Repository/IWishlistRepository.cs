@@ -7,5 +7,6 @@ namespace BookStoreRepository
     {
 
         bool AddToWishList(WishlistModel wishListmodel);
+        bool DeleteBookFromWishList(int wishListId);
     }
 }

@@ -28,5 +28,18 @@ namespace BookStoreManager.Manager
 
         }
 
+        public bool DeleteBookFromWishList(int WishListId)
+        {
+            try
+            {
+                return this.repository.DeleteBookFromWishList(WishListId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
+
     }
 }
