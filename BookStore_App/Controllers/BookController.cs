@@ -29,7 +29,7 @@ namespace BookStore_App.Controllers
                 if (result == 1)
                 {
 
-                    return this.Ok(new { Status = true, Message = "Added New Book Successfully !", data = result });
+                    return this.Ok(new { Status = true, Message = " New Book Added Successfully !", data = result });
                 }
                 else
                 {
@@ -53,17 +53,17 @@ namespace BookStore_App.Controllers
             {
                 if (result != null)
                 {
-                    return this.Ok(new { Status = true, Message = "Book is retrived", data = result });
+                    return this.Ok(new { Status = true, Message = "Book has been retrived", data = result });
 
                 }
                 else
                 {
-                    return this.BadRequest(new { Status = false, Message = "Try again" });
+                    return this.BadRequest(new { Status = false, Message = "Book retrieval failed Try again" });
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return this.NotFound(new { Status = false, Message = e.Message });
+                return this.NotFound(new { Status = false, Message = ex.Message });
             }
         }
 
@@ -77,12 +77,12 @@ namespace BookStore_App.Controllers
                 if (result)
                 {
 
-                    return this.Ok(new { Status = true, Message = "Book updated Successfully !" });
+                    return this.Ok(new { Status = true, Message = "Book Details updated Successfully !" });
                 }
                 else
                 {
 
-                    return this.BadRequest(new { Status = false, Message = "Failed to updated Book" });
+                    return this.BadRequest(new { Status = false, Message = "Failed to update Book Details" });
                 }
             }
             catch (Exception ex)
