@@ -9,10 +9,12 @@ namespace BookStoreManager.Manager
     public class BookManager : IBookManager
     {
         private readonly IBookRepository repository;
+
         public BookManager(IBookRepository repository)
         {
             this.repository = repository;
         }
+
         public int AddBook(BookModel bookmodel)
         {
             try
@@ -25,6 +27,7 @@ namespace BookStoreManager.Manager
             }
 
         }
+
         public BookModel GetBook(int bookId)
         {
             try
@@ -37,6 +40,7 @@ namespace BookStoreManager.Manager
             }
 
         }
+
         public bool UpdateBook(BookModel bookmodel)
         {
             try

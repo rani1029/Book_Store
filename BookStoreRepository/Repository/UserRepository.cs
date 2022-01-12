@@ -15,6 +15,7 @@ namespace BookStore_App.BookStoreRepository
     public class UserRepository : IUserRepository
     {
         public IConfiguration Configuration { get; }
+
         public UserRepository(IConfiguration configuration)
         {
             this.Configuration = configuration;
@@ -137,6 +138,7 @@ namespace BookStore_App.BookStoreRepository
 
             }
         }
+
         public string ForgotPassword(string email)
         {
             sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDB"));
