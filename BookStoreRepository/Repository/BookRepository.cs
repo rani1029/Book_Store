@@ -11,11 +11,14 @@ namespace BookStoreRepository.Repository
     public class BookRepository : IBookRepository
     {
         public IConfiguration Configuration { get; }
+
         public BookRepository(IConfiguration configuration)
         {
             this.Configuration = configuration;
         }
+
         SqlConnection sqlConnection;
+
         public int AddBook(BookModel bookmodel)
         {
 
@@ -54,6 +57,7 @@ namespace BookStoreRepository.Repository
                     sqlConnection.Close();
                 }
         }
+
         public BookModel GetBook(int bookId)
         {
             sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDB"));
@@ -188,14 +192,40 @@ namespace BookStoreRepository.Repository
                         return null;
                     }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception(e.Message);
+                    throw new Exception(ex.Message);
                 }
                 finally
                 {
                     sqlConnection.Close();
                 }
+        }
+
+        public int DeleteBook(int bookId)
+        {
+            sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDB"));
+            try
+            {
+                using (sqlConnection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("SpDeleteBook", sqlConnection);
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@BookId", bookId);
+
+                    sqlConnection.Open();
+                    int result = sqlCommand.ExecuteNonQuery();
+                    return result;
+                }
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
         }
 
 
