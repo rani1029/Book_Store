@@ -1,4 +1,5 @@
 ﻿using BookStoreModel;
+using System.Collections.Generic;
 
 namespace BookStoreManager.Manager
 {
@@ -6,5 +7,6 @@ namespace BookStoreManager.Manager
     {
         bool AddToWishList(WishlistModel wishListmodel);
         bool DeleteBookFromWishList(int wishListId);
+        List<WishlistModel> GetWishList(int userId);
     }
 }

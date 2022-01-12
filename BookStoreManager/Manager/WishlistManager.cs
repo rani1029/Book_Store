@@ -41,5 +41,17 @@ namespace BookStoreManager.Manager
 
         }
 
+        public List<WishlistModel> GetWishList(int userId)
+        {
+            try
+            {
+                return this.repository.GetWishList(userId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }
