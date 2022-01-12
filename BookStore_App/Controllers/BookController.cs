@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookStore_App.BookStoreModel;
 using BookStoreManager.Manager;
 using BookStoreModel;
 using Microsoft.AspNetCore.Mvc;
@@ -89,6 +90,28 @@ namespace BookStore_App.Controllers
 
                 return this.NotFound(new { Status = false, Message = ex.Message });
 
+            }
+        }
+
+        [HttpPost]
+        [Route("GetAllBooks")]
+        public IActionResult GetAllBooks()
+        {
+            var result = this.manager.GetAllBooks();
+            try
+            {
+                if (result != null)
+                {
+                    return this.Ok(new ResponseModel<object>() { Status = true, Message = "all book details Retrieved succssfully", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "No book exists" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }
 
