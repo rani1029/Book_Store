@@ -50,6 +50,19 @@ namespace BookStoreManager.Manager
 
         }
 
+        public int DeleteBook(int bookId)
+        {
+            try
+            {
+                return this.repository.DeleteBook(bookId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
+
         public List<BookModel> GetAllBooks()
         {
             try

@@ -115,5 +115,27 @@ namespace BookStore_App.Controllers
             }
         }
 
+        [HttpDelete]
+        [Route("api/deleteBook")]
+        public IActionResult DeleteBook(int bookId)
+        {
+            try
+            {
+                int result = this.manager.DeleteBook(bookId);
+                if (result == 1)
+                {
+                    return this.Ok(new { Status = true, Message = "Book details deleted successfully", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "Bookid does not exists", Data = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new { Status = false, Message = ex.Message });
+            }
+        }
+
     }
 }

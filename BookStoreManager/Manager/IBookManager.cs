@@ -9,5 +9,6 @@ namespace BookStoreManager.Manager
         BookModel GetBook(int bookId);
         bool UpdateBook(BookModel bookmodel);
         List<BookModel> GetAllBooks();
+        int DeleteBook(int bookId);
     }
 }
