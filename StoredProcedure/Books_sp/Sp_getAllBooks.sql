@@ -1,0 +1,5 @@
+CREATE PROC SpGetAllBooks
+AS
+BEGIN 
+	SELECT * FROM [Books]
+END
