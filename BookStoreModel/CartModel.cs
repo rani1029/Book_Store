@@ -9,6 +9,6 @@ namespace BookStoreModel
         public int CartId { get; set; }
         public int UserId { get; set; }
         public int BookId { get; set; }
-        public int BookQantity { get; set; }
+        public int BookQuantity { get; set; }
     }
 }
