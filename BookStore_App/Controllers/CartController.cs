@@ -17,6 +17,7 @@ namespace BookStore_App.Controllers
         {
             this.manager = manager;
         }
+
         [HttpPost]
         [Route("AddToCart")]
         public IActionResult AddToCart(CartModel cartModel)
@@ -40,5 +41,32 @@ namespace BookStore_App.Controllers
             }
 
         }
+
+        [HttpPost]
+        [Route("UpdateCart")]
+        public IActionResult UpdateCart(int cartId, int bookQuantity)
+        {
+            try
+            {
+                var result = this.manager.UpdateCart(cartId, bookQuantity);
+                if (result > 0)
+                {
+                    return this.Ok(new { Status = true, Message = " Cart updated Successfully !" });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = " cart updation failed !" });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+
+        }
+
+
+
     }
 }

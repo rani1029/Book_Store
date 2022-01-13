@@ -8,5 +8,6 @@ namespace BookStoreRepository.Repository
         IConfiguration Configuration { get; }
 
         bool AddToCart(CartModel cart);
+        int UpdateCart(int cartId, int bookQuantity);
     }
 }

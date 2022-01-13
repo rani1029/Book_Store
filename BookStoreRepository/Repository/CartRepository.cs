@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -30,12 +31,20 @@ namespace BookStoreRepository.Repository
                     sqlConnection.Open();
                     sqlCommand.Parameters.AddWithValue("@BookId", cart.BookId);
                     sqlCommand.Parameters.AddWithValue("@UserId", cart.UserId);
-                    sqlCommand.Parameters.AddWithValue("@Quantity", cart.BookQuantity);
-                    var result = sqlCommand.ExecuteNonQuery();
-                    if (result > 0)
+                    //sqlCommand.Parameters.AddWithValue("@Quantity", cart.BookQuantity);
+                    sqlCommand.Parameters.Add("@cart", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    sqlCommand.ExecuteNonQuery();
+                    var result = sqlCommand.Parameters["@cart"].Value;
+
+                    if (result.Equals(2))
+                    {
                         return true;
+                    }
                     else
+                    {
                         return false;
+                    }
+
 
                 }
                 catch (Exception ex)
@@ -48,5 +57,32 @@ namespace BookStoreRepository.Repository
                 }
             }
         }
+
+        public int UpdateCart(int cartId, int bookQuantity)
+        {
+            sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDb"));
+            try
+            {
+                using (sqlConnection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("Sp_UpdateQuantity", sqlConnection);
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@CartId", cartId);
+                    sqlCommand.Parameters.AddWithValue("@BookQuantity", bookQuantity);
+                    sqlConnection.Open();
+                    int result = sqlCommand.ExecuteNonQuery();
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
     }
 }
+
