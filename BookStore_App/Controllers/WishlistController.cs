@@ -28,7 +28,7 @@ namespace BookStore_App.Controllers
                 if (result)
                 {
 
-                    return this.Ok(new ResponseModel<string>() { Status = true, Message = "Book Added To wishlist Successfully !" });
+                    return this.Ok(new { Status = true, Message = "Book Added To wishlist Successfully !" });
                 }
                 else
                 {
