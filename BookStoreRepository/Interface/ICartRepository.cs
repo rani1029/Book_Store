@@ -9,5 +9,6 @@ namespace BookStoreRepository.Repository
 
         bool AddToCart(CartModel cart);
         int UpdateCart(int cartId, int bookQuantity);
+        int DeleteCart(int cartId);
     }
 }
