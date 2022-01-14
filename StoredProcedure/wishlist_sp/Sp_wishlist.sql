@@ -34,8 +34,8 @@ BEGIN
 END
 
 ------------------------------------------------------------------------------
-
-Alter procedure SpGetBooksFromWishList                                         --  To Retreive All Books 
+--  To Retreive All Books
+Alter procedure SpGetBooksFromWishList                                          
 (            
     @UserId varchar(50)        
 ) 
