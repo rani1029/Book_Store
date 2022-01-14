@@ -110,7 +110,6 @@ namespace BookStoreRepository
                             booksModel.RatingCount = Convert.ToInt32(read["RatingCount"]);
                             booksModel.Image = read["Image"].ToString();
                             booksModel.OriginalPrice = Convert.ToInt32(read["OriginalPrice"]);
-                            //wishListModel.getBook = booksModel;
                             wishList.Add(wishListModel);
                         }
                         return wishList;
