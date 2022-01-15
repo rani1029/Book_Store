@@ -139,7 +139,6 @@ namespace BookStoreRepository.Repository
                             cart.CartId = Convert.ToInt32(reader[5]);
                             cart.BookQuantity = Convert.ToInt32(reader[6]);
                             cart.UserId = Convert.ToInt32(reader[9]);
-                            cart.BooksDetail = book;
                             cartItems.Add(cart);
                         }
 
