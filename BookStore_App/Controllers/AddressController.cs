@@ -18,8 +18,8 @@ namespace BookStore_App.Controllers
         }
 
         [HttpPost]
-        [Route("api/AddBook")]
-        public IActionResult AddBook([FromBody] AddressModel addressModel)
+        [Route("api/AddAddress")]
+        public IActionResult AddAddress([FromBody] AddressModel addressModel)
         {
             try
             {
@@ -33,6 +33,58 @@ namespace BookStore_App.Controllers
                 {
 
                     return this.BadRequest(new { Status = false, Message = "Failed to add new Address" });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return this.NotFound(new { Status = false, Message = ex.Message });
+
+            }
+        }
+
+        [HttpPost]
+        [Route("api/UpdateAddress")]
+        public IActionResult EditAddress([FromBody] AddressModel addressModel)
+        {
+            try
+            {
+                var result = this.manager.UpdateAddress(addressModel);
+                if (result == 1)
+                {
+
+                    return this.Ok(new { Status = true, Message = "  Address Updated Successfully !", data = result });
+                }
+                else
+                {
+
+                    return this.BadRequest(new { Status = false, Message = "Failed to Update  Address" });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return this.NotFound(new { Status = false, Message = ex.Message });
+
+            }
+        }
+
+        [HttpGet]
+        [Route("api/GetUserAddresses")]
+        public IActionResult GetUserAddresses(int userId)
+        {
+            try
+            {
+                var result = this.manager.GetAddressesOfUser(userId);
+                if (result != null)
+                {
+
+                    return this.Ok(new { Status = true, Message = "  Address Retrived Successfully !", data = result });
+                }
+                else
+                {
+
+                    return this.BadRequest(new { Status = false, Message = "Failed to retrieve Addresses" });
                 }
             }
             catch (Exception ex)

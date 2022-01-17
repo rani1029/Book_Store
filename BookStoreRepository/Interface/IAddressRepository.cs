@@ -1,5 +1,6 @@
 ﻿using BookStoreModel;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace BookStoreRepository.Repository
 {
@@ -8,5 +9,7 @@ namespace BookStoreRepository.Repository
         IConfiguration Configuration { get; }
 
         int AddAddress(AddressModel address);
+        int UpdateAddress(AddressModel address);
+        List<AddressModel> GetAddressesOfUser(int userId);
     }
 }
