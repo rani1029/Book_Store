@@ -28,11 +28,7 @@ namespace BookStoreRepository.Repository
                 {
 
                     SqlCommand sqlCommand = new SqlCommand("[dbo].[SpAddBook]", sqlConnection);
-
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-                    sqlConnection.Open();
-
                     sqlCommand.Parameters.AddWithValue("@BookName", bookmodel.BookName);
                     sqlCommand.Parameters.AddWithValue("@AuthorName", bookmodel.AuthorName);
                     sqlCommand.Parameters.AddWithValue("@Price", bookmodel.Price);
@@ -42,6 +38,7 @@ namespace BookStoreRepository.Repository
                     sqlCommand.Parameters.AddWithValue("@Rating", bookmodel.Rating);
                     sqlCommand.Parameters.AddWithValue("@RatingCount", bookmodel.RatingCount);
                     sqlCommand.Parameters.AddWithValue("@Count", bookmodel.BookCount);
+                    sqlConnection.Open();
                     int result = sqlCommand.ExecuteNonQuery();
                     if (result > 0)
                         return 1;
