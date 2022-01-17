@@ -11,5 +11,6 @@ namespace BookStoreRepository.Repository
         int AddAddress(AddressModel address);
         int UpdateAddress(AddressModel address);
         List<AddressModel> GetAddressesOfUser(int userId);
+        List<AddressModel> GetAllRegisteredAddresses();
     }
 }

@@ -51,6 +51,18 @@ namespace BookStoreManager.Manager
             }
         }
 
+        public List<AddressModel> GetAllRegisteredAddresses()
+        {
+            try
+            {
+                return this.repository.GetAllRegisteredAddresses();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
     }
 }

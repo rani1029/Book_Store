@@ -34,4 +34,15 @@ BEGIN
   END CATCH
   END 
 
+  =======================================================
+
+create PROCEDURE Sp_GetAllAddresses
+AS
+BEGIN
+	 begin
+	   SELECT * FROM Address;
+   	 end
+End
+
+
      

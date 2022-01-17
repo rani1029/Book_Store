@@ -43,7 +43,7 @@ namespace BookStore_App.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("api/UpdateAddress")]
         public IActionResult EditAddress([FromBody] AddressModel addressModel)
         {
@@ -76,6 +76,32 @@ namespace BookStore_App.Controllers
             try
             {
                 var result = this.manager.GetAddressesOfUser(userId);
+                if (result != null)
+                {
+
+                    return this.Ok(new { Status = true, Message = "  Address Retrived Successfully !", data = result });
+                }
+                else
+                {
+
+                    return this.BadRequest(new { Status = false, Message = "Failed to retrieve Addresses" });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return this.NotFound(new { Status = false, Message = ex.Message });
+
+            }
+        }
+
+        [HttpGet]
+        [Route("api/GetAllRegisteredAddresses")]
+        public IActionResult GetAllAddresses()
+        {
+            try
+            {
+                var result = this.manager.GetAllRegisteredAddresses();
                 if (result != null)
                 {
 
