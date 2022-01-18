@@ -23,13 +23,14 @@ namespace BookStoreRepository.Repository
             try
             {
                 sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDb"));
-                SqlCommand sqlCommand = new SqlCommand("Sp_AddOrder", sqlConnection);
+                SqlCommand sqlCommand = new SqlCommand("Sp_PlaceOrder", sqlConnection);
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@UserId", orders.UserId);
                 sqlCommand.Parameters.AddWithValue("@AddressId", orders.AddressId);
                 sqlCommand.Parameters.AddWithValue("@BookId", orders.BookId);
-                sqlCommand.Parameters.AddWithValue("@orderValue", orders.OrderValue);
-                sqlCommand.Parameters.AddWithValue("@bookQuantity", orders.BookQuantity);
+                //sqlCommand.Parameters.AddWithValue("@BookQuantity", orders.B);
+                //sqlCommand.Parameters.AddWithValue("@orderValue", orders.OrderValue);
+                //sqlCommand.Parameters.AddWithValue("@bookQuantity", orders.BookQuantity);
                 sqlConnection.Open();
                 int result = sqlCommand.ExecuteNonQuery();
                 if (result > 0)
