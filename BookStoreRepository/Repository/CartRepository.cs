@@ -28,11 +28,11 @@ namespace BookStoreRepository.Repository
                 {
                     SqlCommand sqlCommand = new SqlCommand("Sp_AddToCart", sqlConnection);
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlConnection.Open();
                     sqlCommand.Parameters.AddWithValue("@BookId", cart.BookId);
                     sqlCommand.Parameters.AddWithValue("@UserId", cart.UserId);
-                    //sqlCommand.Parameters.AddWithValue("@Quantity", cart.BookQuantity);
+                    sqlCommand.Parameters.AddWithValue("@Quantity", cart.BookQuantity);
                     sqlCommand.Parameters.Add("@cart", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    sqlConnection.Open();
                     sqlCommand.ExecuteNonQuery();
                     var result = sqlCommand.Parameters["@cart"].Value;
 
@@ -44,7 +44,6 @@ namespace BookStoreRepository.Repository
                     {
                         return false;
                     }
-
 
                 }
                 catch (Exception ex)

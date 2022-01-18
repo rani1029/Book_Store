@@ -28,9 +28,8 @@ namespace BookStoreRepository.Repository
                 sqlCommand.Parameters.AddWithValue("@UserId", orders.UserId);
                 sqlCommand.Parameters.AddWithValue("@AddressId", orders.AddressId);
                 sqlCommand.Parameters.AddWithValue("@BookId", orders.BookId);
-                //sqlCommand.Parameters.AddWithValue("@BookQuantity", orders.B);
-                //sqlCommand.Parameters.AddWithValue("@orderValue", orders.OrderValue);
-                //sqlCommand.Parameters.AddWithValue("@bookQuantity", orders.BookQuantity);
+                sqlCommand.Parameters.AddWithValue("@CartId", orders.CartId);
+                sqlCommand.Parameters.AddWithValue("@quantity", orders.BookQuantity);
                 sqlConnection.Open();
                 int result = sqlCommand.ExecuteNonQuery();
                 if (result > 0)
