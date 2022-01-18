@@ -9,5 +9,6 @@ namespace BookStoreManager.Manager
         int UpdateAddress(AddressModel addressModel);
         List<AddressModel> GetAddressesOfUser(int userId);
         List<AddressModel> GetAllRegisteredAddresses();
+
     }
 }
