@@ -21,5 +21,17 @@ namespace BookStoreManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<FeedBackModel> GetfeedBacks(int bookId)
+        {
+            try
+            {
+                return this.repository.GetfeedBacks(bookId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

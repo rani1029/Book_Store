@@ -1,5 +1,6 @@
 ﻿using BookStoreModel;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace BookStoreRepository.Repository
 {
@@ -8,5 +9,6 @@ namespace BookStoreRepository.Repository
         IConfiguration Configuration { get; }
 
         int AddFeedBack(FeedBackModel feedback);
+        List<FeedBackModel> GetfeedBacks(int bookId);
     }
 }
