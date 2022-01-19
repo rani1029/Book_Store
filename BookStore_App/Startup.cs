@@ -41,6 +41,9 @@ namespace BookStore_App
             services.AddTransient<IAddressManager, AddressManager>();
             services.AddTransient<IOrdersRepository, OrdersRepository>();
             services.AddTransient<IOrdersManager, OrdersManager>();
+            services.AddTransient<IFeedBackRepository, FeedBackRepository>();
+            services.AddTransient<IFeedBackManager, FeedBackManager>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1.0", new OpenApiInfo { Title = "BookStore", Description = "Books", Version = "1.0" });
