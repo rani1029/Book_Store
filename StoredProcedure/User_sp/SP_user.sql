@@ -31,36 +31,23 @@ End
 
 ---------login stored procedure
 
- create procedure spLogin
+Alter procedure spLoginDetails  
 (
 @EmailId VARCHAR(50),
 @Password VARCHAR(20),
-@User int = Null OUTPUT
-)
+@result int output
+)   
 as
 Begin
-	Begin Try
-		IF EXISTS(SELECT * FROM UserRegistration WHERE Email=@EmailId)
-		BEGIN
-		Declare @Encrypt varbinary(200)
-           Select @Encrypt = EncryptByPassPhrase('key', @Password )  
-
-			IF EXISTS(SELECT * FROM UserRegistration WHERE Email=@EmailId AND
-			 Password=@Encrypt)
-			BEGIN
-				SET @User = 2;
-			END
-			ELSE
-			BEGIN
-				SET @User = 1;
-			END
-		END
-		ELSE
-		BEGIN
-			SET @User = 0;
-		END
-	End Try
+	 Begin Try
+	  begin
+	if exists(select * from UserRegistration where Email= @EmailId AND Password=@Password)
+	SELECT Email, Password
+	FROM UserRegistration;
+		 set @result=1;
+	  end
+	 End Try
 	BEGIN CATCH
-	Select ERROR_MESSAGE() AS ErrorMessage;
+	 Select ERROR_MESSAGE() AS ErrorMessage;
 	END CATCH
 End
