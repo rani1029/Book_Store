@@ -35,7 +35,6 @@ namespace BookStore_App.BookStoreRepository
                     using (sqlConnection)
                     {
                         SqlCommand cmd = new SqlCommand("sp_SignUp", sqlConnection);
-
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         UserSignUp.Password = EncryptPassword(UserSignUp.Password);
                         cmd.Parameters.AddWithValue("@Name", UserSignUp.CustomerName);
@@ -82,7 +81,6 @@ namespace BookStore_App.BookStoreRepository
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     login.Password = EncryptPassword(login.Password);
                     sqlCommand.Parameters.AddWithValue("@EmailId", login.Email);
-                    //sqlCommand.Parameters.AddWithValue("@Password", login.Password);
                     sqlCommand.Parameters.AddWithValue("@Password", login.Password);
                     sqlCommand.Parameters.Add("@User", SqlDbType.Int).Direction = ParameterDirection.Output;
                     sqlConnection.Open();
