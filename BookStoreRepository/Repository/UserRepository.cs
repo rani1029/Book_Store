@@ -3,7 +3,6 @@ using BookStoreModel;
 using Experimental.System.Messaging;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Net.Mail;
@@ -15,6 +14,7 @@ namespace BookStore_App.BookStoreRepository
     public class UserRepository : IUserRepository
     {
         public IConfiguration Configuration { get; }
+
         public UserRepository(IConfiguration configuration)
         {
             this.Configuration = configuration;
@@ -25,7 +25,7 @@ namespace BookStore_App.BookStoreRepository
 
         public int Register(SignUpModel UserSignUp)
         {
-            //var result = 0;
+
             // instantiate connection with connection string  
             sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDb"));
             try
@@ -37,7 +37,7 @@ namespace BookStore_App.BookStoreRepository
                         SqlCommand cmd = new SqlCommand("sp_SignUp", sqlConnection);
 
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        //UserSignUp.Password = EncryptPassword(UserSignUp.Password);
+                        UserSignUp.Password = EncryptPassword(UserSignUp.Password);
                         cmd.Parameters.AddWithValue("@Name", UserSignUp.CustomerName);
                         cmd.Parameters.AddWithValue("@Email", UserSignUp.Email);
                         cmd.Parameters.AddWithValue("@Password", UserSignUp.Password);
@@ -52,14 +52,22 @@ namespace BookStore_App.BookStoreRepository
                 return 0;
             }
 
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception(e.Message);
+                throw new Exception(ex.Message);
             }
             finally
             {
                 sqlConnection.Close();
             }
+        }
+
+        //Password encryption
+        public string EncryptPassword(string password)
+        {
+            SHA256 sha256Hash = SHA256.Create();
+            byte[] bytesRepresentation = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return BitConverter.ToString(bytesRepresentation);
         }
 
         public int Login(LoginModel login)
@@ -72,10 +80,10 @@ namespace BookStore_App.BookStoreRepository
                     string storeprocedure = "spLogin";
                     SqlCommand sqlCommand = new SqlCommand(storeprocedure, sqlConnection);
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
+                    login.Password = EncryptPassword(login.Password);
                     sqlCommand.Parameters.AddWithValue("@EmailId", login.Email);
+                    //sqlCommand.Parameters.AddWithValue("@Password", login.Password);
                     sqlCommand.Parameters.AddWithValue("@Password", login.Password);
-                    //sqlCommand.Parameters.AddWithValue("@Password", EncryptPassword(login.Password));
                     sqlCommand.Parameters.Add("@User", SqlDbType.Int).Direction = ParameterDirection.Output;
                     sqlConnection.Open();
                     sqlCommand.ExecuteNonQuery();
@@ -90,7 +98,6 @@ namespace BookStore_App.BookStoreRepository
                     }
                     return 0;
                 }
-                return -1;
 
             }
 
@@ -119,16 +126,15 @@ namespace BookStore_App.BookStoreRepository
                     sqlCommand.Parameters["@result"].Direction = ParameterDirection.Output;
                     //checking the result 
                     sqlCommand.ExecuteNonQuery();
-
                     var result = sqlCommand.Parameters["@result"].Value;
                     if (!(result is DBNull))
                         return true;
                     else
                         return false;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new Exception(e.Message);
+                    throw new Exception(ex.Message);
                 }
                 finally
                 {
@@ -227,12 +233,6 @@ namespace BookStore_App.BookStoreRepository
 
 }
 
-////Password encryption
-//public string EncryptPassword(string password)
-//{
-//    SHA256 sha256Hash = SHA256.Create();
-//    byte[] bytesRepresentation = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
-//    return BitConverter.ToString(bytesRepresentation);
-//}
+
 
 
