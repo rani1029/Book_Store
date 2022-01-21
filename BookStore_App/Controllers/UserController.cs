@@ -15,7 +15,6 @@ namespace BookStore_App.Controllers
         public UserController(IUserManager manager)
         {
             this.manager = manager;
-
         }
 
         [HttpPost]

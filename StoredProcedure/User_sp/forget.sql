@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ALTER PROCEDURE [dbo].[Sp_ForgetPassword]
 (
 @EmailId varchar(255),
@@ -11,6 +12,22 @@ BEGIN
 		If exists(Select * from [dbo].[UserRegistration] where Email=@EmailId)
 	    begin
 		  select Email from UserRegistration 
+=======
+alter PROCEDURE Sp_ResetPassword
+(
+@EmailId varchar(255),
+@NewPassword varchar(50),
+@result int output
+)
+AS
+BEGIN
+
+       If exists(Select * from [dbo].[UserRegistration] where Email=@EmailId)
+	    begin
+		  UPDATE UserRegistration
+          SET 
+		   Password=@NewPassword
+>>>>>>> USER
 		 WHERE Email=@EmailId;
 		 set @result=1;
 		  end 
@@ -18,6 +35,7 @@ BEGIN
 		  begin
 		   set @result=0;
 		  end
+<<<<<<< HEAD
 		
 		-- if insert succeeds, commit the transaction
 		COMMIT TRANSACTION;  
@@ -42,3 +60,6 @@ BEGIN
 		END;  
 	END CATCH
 END; 
+=======
+END 
+>>>>>>> USER
